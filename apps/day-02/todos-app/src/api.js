@@ -19,9 +19,26 @@ const getUser = (username, callback) => {
       name: response.body[0].name
     };
     callback(undefined, user);
-  })
+  });
 };
 
+const getTodos = (userId, callback) => {
+  const url = `${baseUrl}/todos?userId=${userId}`;
+
+  request({ url, json: true }, (error, response) => {
+    if (error) {
+      return callback('Unable to access the service');
+    }
+
+    if (!response.body.length === 0) {
+      return callback('Todos not available for the user');
+    }
+
+    callback(undefined, response.body);
+  })
+}
+
 module.exports = {
-  getUser
+  getUser,
+  getTodos
 }

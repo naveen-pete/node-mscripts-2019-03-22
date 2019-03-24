@@ -1,17 +1,34 @@
-const api = require('./src/api');
+const express = require('express');
+const path = require('path');
+const todosRouter = require('./routers/todos');
 
-api.getUser('Bret', (error, user) => {
-  if (error) {
-    return console.log('Error:', error);
-  }
+const app = express();
 
-  console.log('user:', user);
+const publicPath = path.join(__dirname, 'public');
+
+app.set('view engine', 'hbs');
+
+app.use(express.static(publicPath));
+app.use('/todos', todosRouter);
+
+app.get('', (req, res) => {
+  res.render('index', {
+    title: 'Todos Home updated'
+  });
 });
 
-api.getUser('aaa', (error, user) => {
-  if (error) {
-    return console.log('Error:', error);
-  }
+app.get('/about', (req, res) => {
+  res.send('This is Naveen');
+});
 
-  console.log('user:', user);
-})
+app.get('/help', (req, res) => {
+  res.render('help', {
+    title: 'Todos Help'
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Your app is started and available on port 3000');
+});
+
+
